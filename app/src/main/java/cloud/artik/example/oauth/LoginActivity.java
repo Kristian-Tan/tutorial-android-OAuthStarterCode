@@ -134,6 +134,8 @@ public class LoginActivity extends AppCompatActivity {
         AuthorizationResponse response = AuthorizationResponse.fromIntent(intent);
         AuthorizationException error = AuthorizationException.fromIntent(intent);
         Log.i(LOG_TAG, "Entering handleAuthorizationResponse with response from Intent = " + response.jsonSerialize().toString());
+        Toast.makeText(this, response.jsonSerialize().toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "AUTH CODE:"+response.authorizationCode.toString(), Toast.LENGTH_LONG).show();
 
         if (response != null) {
 
@@ -142,29 +144,37 @@ public class LoginActivity extends AppCompatActivity {
                 final AuthState authState = new AuthState(response, error);
                 Log.i(LOG_TAG, "Received code = " + response.authorizationCode + "\n make another call to get token ...");
 
-                // File 2nd call in Authorization Code method to get the token
-                mAuthorizationService.performTokenRequest(response.createTokenExchangeRequest(), new AuthorizationService.TokenResponseCallback() {
-                    @Override
-                    public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
-                        if (tokenResponse != null) {
-                            authState.update(tokenResponse, exception);
-                            mAuthStateDAL.writeAuthState(authState); //store into persistent storage for use later
-                            String text = String.format("Received token response [%s]", tokenResponse.jsonSerializeString());
-                            Log.i(LOG_TAG, text);
-                            accessToken = tokenResponse.accessToken;
-                            expiresAt = tokenResponse.accessTokenExpirationTime.toString();
-                            refreshToken = tokenResponse.refreshToken;
-                            showAuthInfo();
-                        } else {
-                            Context context = getApplicationContext();
-                            Log.w(LOG_TAG, "Token Exchange failed", exception);
-                            CharSequence text = "Token Exchange failed";
-                            int duration = Toast.LENGTH_LONG;
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
+                try {
+                    // File 2nd call in Authorization Code method to get the token
+                    mAuthorizationService.performTokenRequest(response.createTokenExchangeRequest(), new AuthorizationService.TokenResponseCallback() {
+                        @Override
+                        public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
+                            if(exception != null) {
+                                //Toast.makeText(this, "Error: "+exception.getMessage()+" \r\n\r\n Maybe the server doesn't use https?", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            if (tokenResponse != null) {
+                                authState.update(tokenResponse, exception);
+                                mAuthStateDAL.writeAuthState(authState); //store into persistent storage for use later
+                                String text = String.format("Received token response [%s]", tokenResponse.jsonSerializeString());
+                                Log.i(LOG_TAG, text);
+                                accessToken = tokenResponse.accessToken;
+                                expiresAt = tokenResponse.accessTokenExpirationTime.toString();
+                                refreshToken = tokenResponse.refreshToken;
+                                showAuthInfo();
+                            } else {
+                                Context context = getApplicationContext();
+                                Log.w(LOG_TAG, "Token Exchange failed", exception);
+                                CharSequence text = "Token Exchange failed";
+                                int duration = Toast.LENGTH_LONG;
+                                Toast toast = Toast.makeText(context, text, duration);
+                                toast.show();
+                            }
                         }
-                    }
-                });
+                    });
+                } catch (Exception ex) {
+                    Toast.makeText(this, "Error: "+ex.getMessage()+" \r\n\r\n Maybe the server doesn't use https?", Toast.LENGTH_LONG).show();
+                }
             } else { // come here w/o authorization code. For example, signup finish and user clicks "Back to login"
                 Log.d(LOG_TAG, "additionalParameter = " + response.additionalParameters.toString());
 
@@ -189,6 +199,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 }).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAuthorizationService.dispose();
     }
 }
 

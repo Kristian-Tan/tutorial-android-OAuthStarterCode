@@ -9,6 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
 
         <activity
@@ -36,6 +37,7 @@
                  the intent-filter fields looks like the following
                 -->
                 <data android:scheme="cloud.artik.example.oauth" android:host="oauth2callback"/>
+                <data android:scheme="oauth2" android:host="sso8"/>
             </intent-filter>
         </activity>
 

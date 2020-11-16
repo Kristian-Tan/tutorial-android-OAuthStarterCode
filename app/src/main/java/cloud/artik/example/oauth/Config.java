@@ -17,9 +17,11 @@
 package cloud.artik.example.oauth;
 
 class Config {
-    static final String CLIENT_ID = "YOUR_CLIENT_ID";
+    //static final String CLIENT_ID = "YOUR_CLIENT_ID"; 91a27a61-fa97-4ebd-a8e2-021d11511066
+    static final String CLIENT_ID = "91a27a61-fa97-4ebd-a8e2-021d11511066";
 
     // MUST be consistent with "AUTH REDIRECT URL" of your application set up at the developer.artik.cloud
-    static final String REDIRECT_URI = "cloud.artik.example.oauth://oauth2callback";
+    //static final String REDIRECT_URI = "cloud.artik.example.oauth://oauth2callback";
+    static final String REDIRECT_URI = "oauth2://sso8";
 
 }

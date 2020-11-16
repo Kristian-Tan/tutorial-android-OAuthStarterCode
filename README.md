@@ -1,83 +1,36 @@
-# Android OAuth Starter Code
+# Android OAuth Example
 
-This starter code shows how to make an OAuth call to get a [user token](https://developer.artik.cloud/documentation/introduction/authentication.html#user-token) from ARTIK Cloud. It uses [AppAuth for Android](http://openid.github.io/AppAuth-Android/)(an open source OAuth client library) instead of the WebView UI element for improved security. The implemented OAuth method is [Authorization Code with PKCE](https://developer.artik.cloud/documentation/getting-started/authentication.html#authorization-code-method).
+## About
+- forked from https://github.com/artikcloud/tutorial-android-OAuthStarterCode
+- changed to show how to implement OAuth2 login on Android
+- please view original README.md in README_original.md
+- please note that this app's purpose is purely made to be educational, demonstration, or proof-of-concept of how to integrate OAuth2 single-sign-on with android application
 
-## Demo
+## Changes
+- target API level to API 24 (Android 7.0 Nougat)
+- fix some gradle script (so that it compiles)
+- auth redirect URL changed to: ```oauth2://sso8```
+- allow cleartext (HTTP), and point oauth2 token endpoint to 10.0.2.2 (host of android studio's localhost)
+- set app to 'Toast' the auth code after getting callback
 
-- Run the Android app. 
-- Click Login button.
+## Notes
+- the OAuth2 server-side uses php (laravel-passport) on laravel 8 (hence ```sso8``` naming)
 
-![GitHub Logo](./img/screenshot-login-btn.png)
+## Setup
 
-- Sign in or sign up on the following screen:
+### OAuth2 server setup
+- run OAuth2 server-side (not included in this repository)
+- create new client OR edit a client, set it to enable 'implicit grant' flow
+- set the client's redirect URL to ```oauth2://sso8``` OR any other custom URL value
+- get the client's client_id
 
-![GitHub Logo](./img/screenshot-signin-signup.png)
-
-- Receive the access token after login succeeds:
-
-![GitHub Logo](./img/screenshot-receive-accesstoken.png)
-
-## Prerequisites
-* Android Studio
-* Android SDK for API level 24
-
-## Setup / Installation:
-
-### Set up at ARTIK Cloud
-
-Follow [these instructions](https://developer.artik.cloud/documentation/tutorials/your-first-application.html#create-an-application) to create an application using the Developer Dashboard. For this tutorial, select the following:
-
-- Set "Redirect URL" for your application to `cloud.artik.example.oauth://oauth2callback`.
-- Under Authentication, **only check "Authorization Code with PKCE" as AUTH METHODS**. 
-
-[Make a note of your client ID](https://developer.artik.cloud/documentation/tools/web-tools.html#how-to-find-your-application-id), which you will need in the next step.
-
-### Set up your Android project
-
-- Change `CLIENT_ID` to your own client ID (application ID) at the following lines in `Config.java`:
-
-~~~java
-private static final String CLIENT_ID = "YOUR_CLIENT_ID";
-~~~
-
-- Make sure `REDIRECT_URI` at the following line in `Config.java` is consistent with "Redirect URL" for your application at the Developer Dashboard:
-
-~~~java
-public static final String REDIRECT_URI = "cloud.artik.example.oauth://oauth2callback";
-~~~
-
-- Make sure the `intent-filter` field for `net.openid.appauth.RedirectUriReceiverActivity` in `AndroidManifest.xml` respects "Redirect URL" for your application at the Developer Dashboard:
-
-~~~xml
-<data android:scheme="cloud.artik.example.oauth" android:host="oauth2callback"/>
-~~~
-
-- Make sure the `appAuthRedirectScheme` at the following line in `build.gradle` (Module: app) respects "Redirect URL" for your application at the Developer Dashboard:
-
-~~~
-manifestPlaceholders = [appAuthRedirectScheme: "cloud.artik.example.oauth://oauth2callback"]
-~~~
-
-- Build the Android project.
-
-## More examples
-
-Peek into Andriod applications in [Tutorials](https://developer.artik.cloud/documentation/tutorials/) and [Samples](https://developer.artik.cloud/documentation/samples/) for more examples.
-
-More about ARTIK Cloud
----------------
-
-If you are not familiar with ARTIK Cloud, we have extensive documentation at https://developer.artik.cloud/documentation
-
-The full ARTIK Cloud API specification can be found at https://developer.artik.cloud/documentation/api-reference/
-
-Peek into advanced sample applications at https://developer.artik.cloud/documentation/samples/
-
-To create and manage your services and devices on ARTIK Cloud, visit the Developer Dashboard at https://developer.artik.cloud
-
-License and Copyright
----------------------
-
-Licensed under the Apache License. See [LICENSE](LICENSE).
-
-Copyright (c) 2017 Samsung Electronics Co., Ltd.
+### Android application setup
+- clone this repository
+- install android studio
+- install required sdk (API level 24 or 30)
+- install avd
+- edit ```Config.java```: input your client_id and redirect_url (obtained in previous step, example: 91a27a61-fa97-4ebd-a8e2-021d11511066)
+- edit ```AuthHelper.java```: input your OAuth2 server's _authorize_ and _token_ endpoint there (example: http://10.0.2.2/myoauth2server/oauth/token)
+- run / build
+- click "Login" button, and observe the logcat for auth_code, refresh_token, and access_token
+- note that the app might crash if your server doesn't use HTTPS or the SSL certificate is invalid

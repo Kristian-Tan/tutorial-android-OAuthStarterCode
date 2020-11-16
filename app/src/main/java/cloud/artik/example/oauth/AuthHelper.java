@@ -23,11 +23,13 @@ import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ResponseTypeValues;
 
 class AuthHelper {
-    private static final String ARTIKCLOUD_AUTHORIZE_URI = "https://accounts.artik.cloud/signin";
-    private static final String ARTIKCLOUD_TOKEN_URI = "https://accounts.artik.cloud/token";
+    //private static final String ARTIKCLOUD_AUTHORIZE_URI = "https://accounts.artik.cloud/signin";
+    //private static final String ARTIKCLOUD_TOKEN_URI = "https://accounts.artik.cloud/token";
+    private static final String ARTIKCLOUD_AUTHORIZE_URI = "http://10.0.2.2/latihan/std-sso8/public/oauth/authorize";
+    private static final String ARTIKCLOUD_TOKEN_URI = "http://10.0.2.2/latihan/std-sso8/public/oauth/token";
 
-    static final String INTENT_ARTIKCLOUD_AUTHORIZATION_RESPONSE
-            = "cloud.artik.example.oauth.ARTIKCLOUD_AUTHORIZATION_RESPONSE";
+    //static final String INTENT_ARTIKCLOUD_AUTHORIZATION_RESPONSE = "cloud.artik.example.oauth.ARTIKCLOUD_AUTHORIZATION_RESPONSE";
+    static final String INTENT_ARTIKCLOUD_AUTHORIZATION_RESPONSE = "cloud.artik.example.oauth.ARTIKCLOUD_AUTHORIZATION_RESPONSE";
     static final String USED_INTENT = "USED_INTENT";
 
 
