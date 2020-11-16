@@ -36,10 +36,24 @@
 - note that the app might crash if your server doesn't use HTTPS or the SSL certificate is invalid
 
 ## Screenshots
-- default page ![GitHub Logo](./img/ss1.png)
-- laravel's stock landing page ![GitHub Logo](./img/ss2.png)
-- laravel-ui login page, shown after login button clicked ![GitHub Logo](./img/ss3.png)
-- passport's authorization endpoint ![GitHub Logo](./img/ss4.png)
-- app crashed because OAuth2 server didn't use SSL ![GitHub Logo](./img/ss5.png)
-- but the app managed to get auth_code, yay!! ![GitHub Logo](./img/ss6.png)
-- code received on logcat, yay!! ![GitHub Logo](./img/ss7.png)
+
+#### default page 
+![GitHub Logo](./img/ss1.png)
+
+#### laravel's stock landing page 
+![GitHub Logo](./img/ss2.png)
+
+#### laravel-ui login page, shown after login button clicked 
+![GitHub Logo](./img/ss3.png)
+
+#### passport's authorization endpoint 
+![GitHub Logo](./img/ss4.png)
+
+#### app crashed because OAuth2 server didn't use SSL 
+![GitHub Logo](./img/ss5.png)
+
+#### but the app managed to get auth_code, yay!! 
+![GitHub Logo](./img/ss6.png)
+
+#### code received on logcat, yay!! 
+![GitHub Logo](./img/ss7.png)
