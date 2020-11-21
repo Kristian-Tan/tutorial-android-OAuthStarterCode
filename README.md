@@ -15,6 +15,7 @@
 
 ## Notes
 - the OAuth2 server-side uses php (laravel-passport) on laravel 8 (hence ```sso8``` naming)
+- in order to make laravel-passport works with "Authorization Code Grant with PKCE", make sure to create the client with ```php artisan passport:client --public``` (or just update the database and set ```oauth_clients.secret``` to NULL), ref: https://laravel.com/docs/8.x/passport#creating-a-auth-pkce-grant-client
 
 ## Setup
 
