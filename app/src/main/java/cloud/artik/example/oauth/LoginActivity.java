@@ -29,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import net.openid.appauth.AuthState;
@@ -55,6 +56,11 @@ public class LoginActivity extends AppCompatActivity {
     AuthorizationService mAuthorizationService;
     AuthStateDAL mAuthStateDAL;
 
+    EditText editTextRedirectURI;
+    EditText editTextClientID;
+    EditText editTextEndpointAuth;
+    EditText editTextEndpointToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "Entering onCreate ...");
@@ -73,6 +79,29 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mAuthStateDAL = new AuthStateDAL(this);
+
+
+        editTextRedirectURI = (EditText) findViewById(R.id.editTextRedirectURI);
+        editTextClientID = (EditText) findViewById(R.id.editTextClientID);
+        editTextEndpointAuth = (EditText) findViewById(R.id.editTextEndpointAuth);
+        editTextEndpointToken = (EditText) findViewById(R.id.editTextEndpointToken);
+
+        editTextRedirectURI.setText( Config.REDIRECT_URI );
+        editTextClientID.setText( Config.CLIENT_ID );
+        editTextEndpointAuth.setText( AuthHelper.ARTIKCLOUD_AUTHORIZE_URI );
+        editTextEndpointToken.setText( AuthHelper.ARTIKCLOUD_TOKEN_URI );
+
+        Button mButtonSaveSetting = (Button) findViewById(R.id.btn_savesetting);
+        mButtonSaveSetting.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Config.REDIRECT_URI = editTextRedirectURI.getText().toString();
+                Config.CLIENT_ID = editTextClientID.getText().toString();
+                AuthHelper.ARTIKCLOUD_AUTHORIZE_URI = editTextEndpointAuth.getText().toString();
+                AuthHelper.ARTIKCLOUD_TOKEN_URI = editTextEndpointToken.getText().toString();
+            }
+        });
     }
 
     // File OAuth call with Authorization Code method
@@ -149,10 +178,10 @@ public class LoginActivity extends AppCompatActivity {
                     mAuthorizationService.performTokenRequest(response.createTokenExchangeRequest(), new AuthorizationService.TokenResponseCallback() {
                         @Override
                         public void onTokenRequestCompleted(@Nullable TokenResponse tokenResponse, @Nullable AuthorizationException exception) {
-                            if(exception != null) {
-                                //Toast.makeText(this, "Error: "+exception.getMessage()+" \r\n\r\n Maybe the server doesn't use https?", Toast.LENGTH_LONG).show();
-                                return;
-                            }
+                            //if(exception == null) {
+                            //    //Toast.makeText(this, "Error: "+exception.getMessage()+" \r\n\r\n Maybe the server doesn't use https?", Toast.LENGTH_LONG).show();
+                            //    return;
+                            //}
                             if (tokenResponse != null) {
                                 authState.update(tokenResponse, exception);
                                 mAuthStateDAL.writeAuthState(authState); //store into persistent storage for use later

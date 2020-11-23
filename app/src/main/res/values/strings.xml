@@ -3,4 +3,9 @@
     <string name="login_activity_screen_name">OAuth2 Example</string>
     <string name="hello_world">OAuth2 Example, credit to artikcloud / tutorial-android-OAuthStarterCode </string>
     <string name="login_btn_txt">login</string>
+    <string name="savesetting_btn_txt">save setting</string>
+    <string name="redirecturi_label_txt">Redirect URI</string>
+    <string name="clientid_label_txt">Client ID</string>
+    <string name="endpointauth_label_txt">Endpoint Auth</string>
+    <string name="endpointtoken_label_txt">Endpoint Token</string>
 </resources>
