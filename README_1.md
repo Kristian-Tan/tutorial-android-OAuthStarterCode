@@ -50,11 +50,11 @@
 #### passport's authorization endpoint 
 ![GitHub Logo](./img/ss4.png)
 
-#### login success, get auth code
+#### app crashed because OAuth2 server didn't use SSL 
 ![GitHub Logo](./img/ss5.png)
 
-#### login success, get access token
-![GitHub Logo](./img/ss8.png)
+#### but the app managed to get auth_code, yay!! 
+![GitHub Logo](./img/ss6.png)
 
-#### login success, get user info (from 'whoami' API endpoint, not an OAuth2 standard, just json dump of user attributes)
-![GitHub Logo](./img/ss9.png)
+#### code received on logcat, yay!! 
+![GitHub Logo](./img/ss7.png)

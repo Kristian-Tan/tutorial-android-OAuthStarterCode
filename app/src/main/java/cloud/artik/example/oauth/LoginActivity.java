@@ -32,12 +32,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationResponse;
 import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.TokenResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static cloud.artik.example.oauth.AuthHelper.INTENT_ARTIKCLOUD_AUTHORIZATION_RESPONSE;
 import static cloud.artik.example.oauth.AuthHelper.USED_INTENT;
@@ -60,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextClientID;
     EditText editTextEndpointAuth;
     EditText editTextEndpointToken;
+    EditText editTextEndpointWhoami;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +97,13 @@ public class LoginActivity extends AppCompatActivity {
         editTextClientID = (EditText) findViewById(R.id.editTextClientID);
         editTextEndpointAuth = (EditText) findViewById(R.id.editTextEndpointAuth);
         editTextEndpointToken = (EditText) findViewById(R.id.editTextEndpointToken);
+        editTextEndpointWhoami = (EditText) findViewById(R.id.editTextEndpointWhoami);
 
         editTextRedirectURI.setText( Config.REDIRECT_URI );
         editTextClientID.setText( Config.CLIENT_ID );
         editTextEndpointAuth.setText( AuthHelper.ARTIKCLOUD_AUTHORIZE_URI );
         editTextEndpointToken.setText( AuthHelper.ARTIKCLOUD_TOKEN_URI );
+        editTextEndpointWhoami.setText( AuthHelper.ENDPOINT_WHOAMI );
 
         Button mButtonSaveSetting = (Button) findViewById(R.id.btn_savesetting);
         mButtonSaveSetting.setOnClickListener(new Button.OnClickListener() {
@@ -100,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                 Config.CLIENT_ID = editTextClientID.getText().toString();
                 AuthHelper.ARTIKCLOUD_AUTHORIZE_URI = editTextEndpointAuth.getText().toString();
                 AuthHelper.ARTIKCLOUD_TOKEN_URI = editTextEndpointToken.getText().toString();
+                AuthHelper.ENDPOINT_WHOAMI = editTextEndpointWhoami.getText().toString();
             }
         });
     }
@@ -191,6 +206,44 @@ public class LoginActivity extends AppCompatActivity {
                                 expiresAt = tokenResponse.accessTokenExpirationTime.toString();
                                 refreshToken = tokenResponse.refreshToken;
                                 showAuthInfo();
+
+                                // make api call to "whoami"
+                                RequestQueue queue = Volley.newRequestQueue(getBaseContext());
+                                StringRequest stringRequest = new StringRequest(Request.Method.GET, AuthHelper.ENDPOINT_WHOAMI,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                // Display response string.
+                                                Log.i(LOG_TAG, "whoami API response: "+response);
+                                                Toast.makeText(getBaseContext(), "LOGIN SUCCESS, this is your identity: "+response.toString(), Toast.LENGTH_LONG).show();
+                                                /*
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                                                builder.setMessage("API whoami response: "+response).setCancelable(false)
+                                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                        }
+                                                    }).show();
+                                                */
+                                            }
+                                        }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.i(LOG_TAG, "whoami API failed: "+error.toString());
+                                        Toast.makeText(getBaseContext(), error.toString(), Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                                {
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError { // custom HTTP header
+                                        Map<String, String>  params = new HashMap<String, String>();
+                                        params.put("Authorization", "Bearer "+accessToken);
+                                        return params;
+                                    }
+                                }
+                                ;
+                                // Add the request to the RequestQueue.
+                                queue.add(stringRequest);
+
                             } else {
                                 Context context = getApplicationContext();
                                 Log.w(LOG_TAG, "Token Exchange failed", exception);

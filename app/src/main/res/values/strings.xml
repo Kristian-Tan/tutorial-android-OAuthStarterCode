@@ -8,4 +8,5 @@
     <string name="clientid_label_txt">Client ID</string>
     <string name="endpointauth_label_txt">Endpoint Auth</string>
     <string name="endpointtoken_label_txt">Endpoint Token</string>
+    <string name="endpointwhoami_label_txt">Endpoint Whoami (API)</string>
 </resources>

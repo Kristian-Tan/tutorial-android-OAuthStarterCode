@@ -27,6 +27,7 @@ public class AuthHelper {
     //private static final String ARTIKCLOUD_TOKEN_URI = "https://accounts.artik.cloud/token";
     public static String ARTIKCLOUD_AUTHORIZE_URI = "https://sso.site/oauth/authorize";
     public static String ARTIKCLOUD_TOKEN_URI = "https://sso.site/oauth/token";
+    public static String ENDPOINT_WHOAMI = "https://sso.site/api/whoami";
 
     //static final String INTENT_ARTIKCLOUD_AUTHORIZATION_RESPONSE = "cloud.artik.example.oauth.ARTIKCLOUD_AUTHORIZATION_RESPONSE";
     static final String INTENT_ARTIKCLOUD_AUTHORIZATION_RESPONSE = "cloud.artik.example.oauth.ARTIKCLOUD_AUTHORIZATION_RESPONSE";
