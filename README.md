@@ -12,6 +12,7 @@
 - auth redirect URL changed to: ```oauth2://sso8```
 - allow cleartext (HTTP), and point oauth2 token endpoint to 10.0.2.2 (host of android studio's localhost)
 - set app to 'Toast' the auth code after getting callback
+- add example to consume basic API 'whoami', the API needs ```Authentication: Bearer ...``` HTTP header, and returns user's attribute in JSON format; with volley as HTTP request library
 
 ## Notes
 - the OAuth2 server-side uses php (laravel-passport) on laravel 8 (hence ```sso8``` naming)
@@ -21,7 +22,7 @@
 
 ### OAuth2 server setup
 - run OAuth2 server-side (not included in this repository)
-- create new client OR edit a client, set it to enable 'implicit grant' flow
+- create new client OR edit a client, set it to enable 'PCKE code grant' flow (set as public client)
 - set the client's redirect URL to ```oauth2://sso8``` OR any other custom URL value
 - get the client's client_id
 
